@@ -59,10 +59,10 @@ object main {
 */
 
     def makeTable(dataFile: String, schemaJSON: String, tableName: String) {
-      import org.apache.spark.sql.types.{ StructType, StructField, StringType};
+      import org.apache.spark.sql.types.{ StructType, StructField, StringType };
       //use tuples
       //val fields = feedJSONToList(schemaJSON).map(fieldName => StructField(fieldName, StringType, nullable = true))
-        val fields = feedJSONToListTuple(schemaJSON).map {case (fieldName, dataType ) => StructField(fieldName, dataTypeMapper(dataType), nullable = true) }
+      val fields = feedJSONToListTuple(schemaJSON).map { case (fieldName, dataType) => StructField(fieldName, dataTypeMapper(dataType), nullable = true) }
       fields.foreach(println)
       val customSchema = StructType(fields)
       //Read the data from HDFS by applying Schema
@@ -70,23 +70,22 @@ object main {
         .format("com.databricks.spark.csv")
         .schema(customSchema)
         .load(dataFile)
-        
+
       //myDataFrame.count  
       myDataFrame.printSchema()
       //myDataFrame.dtypes
-      
+
       myDataFrame.createOrReplaceTempView(tableName)
       val sqlDF = sqlContext.sql("SELECT * FROM " + tableName)
       sqlDF.show()
     }
     //-----------------------------------------------------------------------------------
 
-    def joinTable(table_one: String, table_two: String) {
-      //    makeTable(table_one, table_one + "_schema.txt")
-      //    makeTable(table_two, table_two + "_schema.txt")
-      val groupCheck = sqlContext.sql("SELECT count(*) FROM employees GROUP By DEPARTMENT_ID")
-      groupCheck.show()
-      InnerJoinColumn(table_one, table_two, "DEPARTMENT_ID")
+    def joinTable(joinSources: Seq[(String, String, String)]) {
+      joinSources.foreach { case (dataFile, schemaJSON, tableName) => makeTable(dataFile, schemaJSON, tableName) }
+      //  val groupCheck = sqlContext.sql("SELECT count(*) FROM employees GROUP By DEPARTMENT_ID")
+      // groupCheck.show()
+      //InnerJoinColumn(table_one, table_two, "DEPARTMENT_ID")
     }
     //------------------------------------------------------------------------------------
 
@@ -98,8 +97,8 @@ object main {
     //----------------------------------------------------------------------------------------------
 
     //Call Make table - Individually
-    //makeTable("employees","emp_schema.txt")
-    makeTable("departments.csv", "DEPARTMENTS.json", "DEPARTMENTS")
+    joinTable(Array(("departments.csv", "DEPARTMENTS.json", "DEPARTMENTS"), ("employees.csv", "EMPLOYEES.json", "EMPLOYEES")))
+    //makeTable("departments.csv", "DEPARTMENTS.json", "DEPARTMENTS")
     //makeTable("employees.csv", "EMPLOYEES.json", "EMPLOYEES")
     //joinTable("employees", "departments")
     //JSON Implementation---------------------------------------------------------------------------
@@ -120,8 +119,8 @@ object main {
       //fields.map(fieldName => StructField(fieldName, StringType, nullable = true))
       return namesArray
     }
-    
-        def feedJSONToListTuple(filename: String): Seq[(String,String)] = {
+
+    def feedJSONToListTuple(filename: String): Seq[(String, String)] = {
 
       val source = scala.io.Source.fromFile(filename)
       //another approach is : source.getLines mkString "\n"
@@ -145,12 +144,26 @@ object main {
     }
     //------------------------------------------------------------------------------------------------  
     //dataType Mapper
-    def dataTypeMapper(dataType : String) :DataType = dataType match
-    {
-      case "Time" => TimestampType     
-      case "DOUBLE" =>  FloatType
-      case _ => StringType
+    def dataTypeMapper(dataType: String): DataType = dataType match {
+      case "TIME"      => TimestampType
+      case "TIMESTAMP" => TimestampType
+      case "DOUBLE"    => FloatType
+      case "CHAR"      => StringType
+      case "VARCHAR"   => StringType
+      case "DECIMAL"   => DecimalType(10, 10) // fix later DecimalType Doesnt work.
+      case "INTEGER"   => IntegerType
+      case "SMALLINT"  => ShortType
+      case "TINYINT"   => ShortType
+      case "DATE"      => DateType
+      case _           => StringType
     }
+    //---------------------------------------------------------------------------------------------------
+    def queriesExtract() {
     
+    
+    
+    }
+    //---------------------------------------------------------------------------------------------------
+
   }
 }

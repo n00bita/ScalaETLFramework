@@ -27,7 +27,7 @@
                     "name": "HIRE_DATE"
                 }, 
                 {
-                    "dataType": "DOUBLE", 
+                    "dataType": "STRING", 
                     "name": "JOB_ID"
                 }, 
                 {
