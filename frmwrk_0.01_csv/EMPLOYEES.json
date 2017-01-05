@@ -1,0 +1,71 @@
+{
+    "feed": {
+        "schema": {
+            "fields": [
+                {
+                    "dataType": "DOUBLE", 
+                    "name": "EMPLOYEE_ID"
+                }, 
+                {
+                    "dataType": "STRING", 
+                    "name": "FIRST_NAME"
+                }, 
+                {
+                    "dataType": "STRING", 
+                    "name": "LAST_NAME"
+                }, 
+                {
+                    "dataType": "STRING", 
+                    "name": "EMAIL"
+                }, 
+                {
+                    "dataType": "STRING", 
+                    "name": "PHONE_NUMBER"
+                }, 
+                {
+                    "dataType": "STRING", 
+                    "name": "HIRE_DATE"
+                }, 
+                {
+                    "dataType": "DOUBLE", 
+                    "name": "JOB_ID"
+                }, 
+                {
+                    "dataType": "DOUBLE", 
+                    "name": "SALARY"
+                }, 
+                {
+                    "dataType": "DOUBLE", 
+                    "name": "COMMISSION_PCT"
+                }, 
+                {
+                    "dataType": "DOUBLE", 
+                    "name": "DEPARTMENT_ID"
+                }
+            ], 
+            "format": {
+                "delimiters": {
+                    "fieldDelimiter": "\\u0001", 
+                    "row_delimiter": "\\n", 
+                    "rowDelimiter": "\\n", 
+                    "startsWithDelimiter": false
+                }, 
+                "formatType": "delimited", 
+                "charset": "ISO-8859"
+            }
+        }, 
+        "description": "Feed for EMPLOYEES", 
+        "dataSource": {
+            "path": "./", 
+            "feedType": "flat-file"
+        }, 
+        "sourceSystem": "UK1", 
+        "versionInfo": {
+            "versionNo": 1, 
+            "schemaVersion": "2.0", 
+            "versionDtm": "2016-09-12T14:16:00Z"
+        }, 
+        "id": "04929c38dac440bc9e80a17865ca6cff", 
+        "name": "EMPLOYEES"
+    }
+}

@@ -1,0 +1,5 @@
+
+    {"field":"DEPARTMENT_ID", "type":"STRING"}
+    {"field":"DEPARTMENT_NAME", "type":"STRING"}
+    {"field":"MANAGER_ID","type":"INT"}
+    {"field":"LOCATION_ID","type":"INT"}
