@@ -34,7 +34,6 @@ object main {
     StructField("blank", StringType, true)))
  * 
  */
-
   //   val fields = schemaString.split(" ")
   //      .map(fieldName => StructField(fieldName, StringType, nullable = true))
   //   val customSchema = StructType(fields)
