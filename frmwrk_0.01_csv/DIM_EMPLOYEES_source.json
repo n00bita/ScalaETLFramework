@@ -1,0 +1,70 @@
+{
+	"feedGroup": {
+		"feedGroupType": "non-aggregated",
+		"versionInfo": {
+			"versionNo": 1,
+			"schemaVersion": "2.0",
+			"versionDtm": "2016-04-26T14: 16: 00Z"
+		},
+		"description": "Feed-group",
+		"includes": [{
+			"name": "EMPLOYEES",
+			"includeType": "feed"
+		}, {
+			"name": "DEPARTMENTS",
+			"includeType": "feed"
+		}],
+		"sourceSystem": "CACL",
+		"joinCondition": [{
+			"joinType": "Inner join",
+			"joinOn": "SELECT * FROM EMPLOYEES JOIN DEPARTMENTS WHERE EMPLOYEES.DEPARTMENT_ID = DEPARTMENTS.DEPARTMENT_ID"
+		}],
+		"schema": {
+			"fields": [{
+				"name": "EMPLOYEE_ID",
+				"baseFeed": "EMPLOYEES"
+			}, {
+				"name": "FIRST_NAME",
+				"baseFeed": "EMPLOYEES"
+			}, {
+				"name": "LAST_NAME",
+				"baseFeed": "EMPLOYEES"
+			}, {
+				"name": "EMAIL",
+				"baseFeed": "EMPLOYEES"
+			}, {
+				"name": "PHONE_NUMBER",
+				"baseFeed": "EMPLOYEES"
+			}, {
+				"name": "HIRE_DATE",
+				"baseFeed": "EMPLOYEES"
+			}, {
+				"name": "JOB_ID",
+				"baseFeed": "EMPLOYEES"
+			}, {
+				"name": "SALARY",
+				"baseFeed": "EMPLOYEES"
+			}, {
+				"name": "COMMISSION_PCT",
+				"baseFeed": "EMPLOYEES"
+			}, {
+				"name": "DEPARTMENT_ID",
+				"baseFeed": "EMPLOYEES"
+			}, {
+				"name": "DEPARTMENT_ID",
+				"baseFeed": "DEPARTMENTS"
+			}, {
+				"name": "DEPARTMENT_NAME",
+				"baseFeed": "DEPARTMENTS"
+			}, {
+				"name": "MANAGER_ID",
+				"baseFeed": "DEPARTMENTS"
+			}, {
+				"name": "LOCATION_ID",
+				"baseFeed": "DEPARTMENTS"
+			}]
+		},
+		"id": "6ac6561fc60542d0b2ca33caf5f7beeb",
+		"name": "DIM_EMPLOYEES"
+	}
+}

@@ -81,11 +81,14 @@ object main {
     }
     //-----------------------------------------------------------------------------------
 
-    def joinTable(joinSources: Seq[(String, String, String)]) {
+    def joinTable(joinSources: Seq[(String, String, String)] , queryFile : String) {
       joinSources.foreach { case (dataFile, schemaJSON, tableName) => makeTable(dataFile, schemaJSON, tableName) }
       //  val groupCheck = sqlContext.sql("SELECT count(*) FROM employees GROUP By DEPARTMENT_ID")
       // groupCheck.show()
       //InnerJoinColumn(table_one, table_two, "DEPARTMENT_ID")
+      val query = queriesExtract(queryFile)
+      val sqlDF = sqlContext.sql(query)
+      sqlDF.show()
     }
     //------------------------------------------------------------------------------------
 
@@ -97,7 +100,8 @@ object main {
     //----------------------------------------------------------------------------------------------
 
     //Call Make table - Individually
-    joinTable(Array(("departments.csv", "DEPARTMENTS.json", "DEPARTMENTS"), ("employees.csv", "EMPLOYEES.json", "EMPLOYEES")))
+    joinTable(Array(("departments.csv", "DEPARTMENTS.json", "DEPARTMENTS"), ("employees.csv", "EMPLOYEES.json", "EMPLOYEES")),"DIM_EMPLOYEES_source.json")
+    queriesExtract("DIM_EMPLOYEES_source.json")
     //makeTable("departments.csv", "DEPARTMENTS.json", "DEPARTMENTS")
     //makeTable("employees.csv", "EMPLOYEES.json", "EMPLOYEES")
     //joinTable("employees", "departments")
@@ -158,10 +162,15 @@ object main {
       case _           => StringType
     }
     //---------------------------------------------------------------------------------------------------
-    def queriesExtract() {
-    
-    
-    
+    def queriesExtract(filename: String): String = {
+      val source = scala.io.Source.fromFile(filename)
+      val lines = try source.mkString finally source.close()
+      val jsonFromFile: JsValue = Json.parse(lines)
+      val namesArray = ((jsonFromFile \ "feedGroup" \ "schema" \ "fields") \\ "name").map(_.as[String])
+      val basefeedArray = ((jsonFromFile \ "feedGroup" \ "schema" \ "fields") \\ "baseFeed").map(_.as[String])
+      val jointypeArray = ((jsonFromFile \ "feedGroup" \ "joinCondition") \\ "joinType").map(_.as[String])
+      val joinconditionArray = ((jsonFromFile \ "feedGroup" \ "joinCondition") \\ "joinOn").map(_.as[String])
+      joinconditionArray(0)
     }
     //---------------------------------------------------------------------------------------------------
 
